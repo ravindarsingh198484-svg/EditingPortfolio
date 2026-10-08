@@ -53,22 +53,22 @@ const Navbar = () => {
           workwithravindar@gmail.com
         </a>
         <ul>
-          <li>
+          <li className="nav-item-about">
             <a data-href="#about" href="#about">
               <HoverLinks text="ABOUT" />
             </a>
           </li>
-          <li>
+          <li className="nav-item-work">
             <a data-href="#work" href="#work">
               <HoverLinks text="WORK" />
             </a>
           </li>
-          <li>
+          <li className="nav-item-career">
             <a data-href="#career" href="#career">
               <HoverLinks text="CAREER" />
             </a>
           </li>
-          <li>
+          <li className="nav-item-contact">
             <a data-href="#contact" href="#contact">
               <HoverLinks text="CONTACT" />
             </a>

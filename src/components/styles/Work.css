@@ -482,24 +482,156 @@
   border-radius: 20px;
 }
 
+/* Desktop default: Show desktop view, hide mobile view */
+.work-mobile-view {
+  display: none !important;
+}
+.work-desktop-view {
+  display: block;
+}
+
+/* ========================================================
+   MOBILE VIEW (max-width: 768px)
+   Continuous vertical feed, single heading, hidden buttons
+   ======================================================== */
 @media only screen and (max-width: 768px) {
-  .work-box.box-showreel {
-    padding: 20px 16px 24px 16px !important;
-    border-radius: 18px;
-    gap: 16px;
+  .work-desktop-view {
+    display: none !important;
   }
-  .box-showreel .work-info {
+  .work-mobile-view {
+    display: flex !important;
     flex-direction: column;
-    gap: 14px;
+    width: 100%;
   }
-  .box-showreel .work-info-tools {
-    text-align: left;
-    max-width: 100%;
+  .work-section {
+    min-height: auto;
+    padding-bottom: 50px;
+    padding-top: 30px;
   }
-  .box-showreel .work-title h3 {
-    font-size: 32px;
+  .work-container {
+    width: 100%;
+    padding: 0 4px;
+    box-sizing: border-box;
   }
-  .box-showreel .work-title h4 {
+  .work-mobile-header {
+    margin-bottom: 24px;
+    padding: 0 4px;
+  }
+  .work-mobile-title {
+    font-size: 34px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+  }
+  .work-mobile-title span {
+    color: var(--accentColor);
+  }
+  .work-mobile-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+  }
+  .work-mobile-card {
+    background: radial-gradient(
+      120% 120% at 50% 0%,
+      rgba(196, 129, 255, 0.08) 0%,
+      rgba(16, 13, 22, 0.88) 100%
+    );
+    border: 1px solid rgba(196, 129, 255, 0.22);
+    border-radius: 20px;
+    padding: 20px 16px 22px 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(196, 129, 255, 0.08);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .work-mobile-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .work-mobile-card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .work-mobile-num {
+    font-size: 26px;
+    font-weight: 700;
+    color: #c481ff;
+    line-height: 1;
+    text-shadow: 0 0 15px rgba(196, 129, 255, 0.4);
+  }
+  .work-mobile-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .work-mobile-project-title {
     font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+  }
+  .work-mobile-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #c481ff;
+    background: rgba(196, 129, 255, 0.15);
+    border: 1px solid rgba(196, 129, 255, 0.35);
+    width: fit-content;
+    letter-spacing: 0.4px;
+  }
+  .work-mobile-desc {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: #a8a8b8;
+    margin: 0;
+  }
+  .work-mobile-tools {
+    font-size: 11.5px;
+    color: #c481ff;
+    font-weight: 400;
+  }
+  .work-mobile-tools span {
+    color: #8c8c99;
+    font-weight: 500;
+  }
+  .work-mobile-video-container.container-landscape {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+  }
+  .work-mobile-video-container.container-shorts {
+    width: 240px;
+    max-width: 85%;
+    aspect-ratio: 9 / 16;
+    margin: 0 auto;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #000000;
+    border: 1px solid rgba(196, 129, 255, 0.25);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(196, 129, 255, 0.12);
+  }
+  .work-mobile-video-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 }

@@ -140,15 +140,29 @@ const Work = () => {
 
   const filteredProjects = allProjects.filter((p) => p.category === activeTab);
 
+  // Mobile: Stack all videos in a single continuous feed: Long/16:9 videos first, sequentially followed by shorts
+  const mobileProjects = [
+    ...allProjects.filter((p) => p.category === "reel" || p.category === "long"),
+    ...allProjects.filter((p) => p.category === "shorts"),
+  ];
+
   useGSAP(
     () => {
+      // On mobile phones (<= 768px), disable horizontal pinning scroll to allow natural vertical feed scrolling
+      if (window.innerWidth <= 768) {
+        ScrollTrigger.getById("work")?.kill();
+        return;
+      }
+
       // Clear any prior horizontal scroll translation when changing category
-      gsap.set(".work-flex", { clearProps: "transform" });
+      gsap.set(".work-desktop-view .work-flex", { clearProps: "transform" });
 
       let translateX: number = 0;
 
       function setTranslateX() {
-        const boxes = document.getElementsByClassName("work-box");
+        const boxes = document.querySelectorAll<HTMLElement>(
+          ".work-desktop-view .work-box"
+        );
         if (!boxes || boxes.length === 0) return;
         const container = document.querySelector(".work-container");
         if (!container) return;
@@ -159,9 +173,9 @@ const Work = () => {
           parseInt(window.getComputedStyle(boxes[0]).padding) / 2 || 0;
 
         let totalWidth = 0;
-        for (let i = 0; i < boxes.length; i++) {
-          totalWidth += boxes[i].getBoundingClientRect().width;
-        }
+        boxes.forEach((box) => {
+          totalWidth += box.getBoundingClientRect().width;
+        });
 
         translateX = totalWidth - (rectLeft + parentWidth) + padding;
         if (translateX < 0) translateX = 0;
@@ -182,7 +196,7 @@ const Work = () => {
           },
         });
 
-        timeline.to(".work-flex", {
+        timeline.to(".work-desktop-view .work-flex", {
           x: -translateX,
           ease: "none",
         });
@@ -201,128 +215,208 @@ const Work = () => {
   return (
     <div className="work-section" id="work">
       <div className="work-container section-container">
-        <div className="work-header-wrap">
-          <div>
-            <h2>
-              My <span>Work</span>
-            </h2>
-            <p className="work-header-sub">Selected projects curated by format and ratio</p>
+        {/* ========================================================
+            DESKTOP / PC VIEW (Completely untouched layout & behavior)
+            ======================================================== */}
+        <div className="work-desktop-view">
+          <div className="work-header-wrap">
+            <div>
+              <h2>
+                My <span>Work</span>
+              </h2>
+              <p className="work-header-sub">Selected projects curated by format and ratio</p>
+            </div>
+
+            {/* Three Categories */}
+            <div className="work-category-tabs">
+              <button
+                className={activeTab === "reel" ? "tab-btn active" : "tab-btn"}
+                onClick={() => setActiveTab("reel")}
+              >
+                1. Showcase Reel (16:9)
+              </button>
+              <button
+                className={activeTab === "long" ? "tab-btn active" : "tab-btn"}
+                onClick={() => setActiveTab("long")}
+              >
+                2. Long Videos (16:9)
+              </button>
+              <button
+                className={activeTab === "shorts" ? "tab-btn active" : "tab-btn"}
+                onClick={() => setActiveTab("shorts")}
+              >
+                3. Shorts (9:16)
+              </button>
+            </div>
           </div>
 
-          {/* Three Categories */}
-          <div className="work-category-tabs">
-            <button
-              className={activeTab === "reel" ? "tab-btn active" : "tab-btn"}
-              onClick={() => setActiveTab("reel")}
-            >
-              1. Showcase Reel (16:9)
-            </button>
-            <button
-              className={activeTab === "long" ? "tab-btn active" : "tab-btn"}
-              onClick={() => setActiveTab("long")}
-            >
-              2. Long Videos (16:9)
-            </button>
-            <button
-              className={activeTab === "shorts" ? "tab-btn active" : "tab-btn"}
-              onClick={() => setActiveTab("shorts")}
-            >
-              3. Shorts (9:16)
-            </button>
-          </div>
-        </div>
+          <div className={`work-flex ${filteredProjects.length === 1 ? "single-item" : ""}`}>
+            {filteredProjects.map((project) => (
+              <div
+                className={`work-box ${
+                  project.category === "reel"
+                    ? "box-showreel"
+                    : project.ratio === "9:16"
+                    ? "box-shorts"
+                    : "box-landscape"
+                }`}
+                key={project.id}
+              >
+                {project.category === "reel" ? (
+                  // Dedicated cinematic showcase view
+                  <>
+                    <div className="work-info">
+                      <div className="work-info-meta">
+                        <div className="work-title">
+                          <h3>{project.number}</h3>
+                          <div>
+                            <h4>{project.title}</h4>
+                            <span className="showreel-badge-pill">
+                              ★ Featured Showreel • 16:9 • 1080p
+                            </span>
+                          </div>
+                        </div>
+                        <p className="work-project-desc">{project.description}</p>
+                      </div>
+                    </div>
 
-        <div className={`work-flex ${filteredProjects.length === 1 ? "single-item" : ""}`}>
-          {filteredProjects.map((project) => (
-            <div
-              className={`work-box ${
-                project.category === "reel"
-                  ? "box-showreel"
-                  : project.ratio === "9:16"
-                  ? "box-shorts"
-                  : "box-landscape"
-              }`}
-              key={project.id}
-            >
-              {project.category === "reel" ? (
-                // Dedicated cinematic showcase view
-                <>
-                  <div className="work-info">
-                    <div className="work-info-meta">
+                    <div className="work-video-wrapper wrapper-showreel">
+                      <video
+                        controls
+                        playsInline
+                        preload="auto"
+                        poster={project.poster}
+                        key={project.videoUrl}
+                        className="work-video-player video-showreel"
+                      >
+                        <source src={project.videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </>
+                ) : (
+                  // Standard cards for long-form and shorts
+                  <>
+                    <div className="work-info">
                       <div className="work-title">
                         <h3>{project.number}</h3>
                         <div>
                           <h4>{project.title}</h4>
-                          <span className="showreel-badge-pill">
-                            ★ Featured Showreel • 16:9 • 1080p
-                          </span>
+                          <p className="ratio-tag-badge">{project.ratio}</p>
                         </div>
                       </div>
                       <p className="work-project-desc">{project.description}</p>
                     </div>
-                  </div>
 
-                  <div className="work-video-wrapper wrapper-showreel">
-                    <video
-                      controls
-                      playsInline
-                      preload="auto"
-                      poster={project.poster}
-                      key={project.videoUrl}
-                      className="work-video-player video-showreel"
-                    >
-                      <source src={project.videoUrl} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
-                </>
-              ) : (
-                // Standard cards for long-form and shorts
-                <>
-                  <div className="work-info">
-                    <div className="work-title">
-                      <h3>{project.number}</h3>
-                      <div>
-                        <h4>{project.title}</h4>
-                        <p className="ratio-tag-badge">{project.ratio}</p>
-                      </div>
-                    </div>
-                    <p className="work-project-desc">{project.description}</p>
-                  </div>
-
-                  <div
-                    className={`work-video-wrapper ${
-                      project.ratio === "9:16" ? "wrapper-9-16" : "wrapper-16-9"
-                    }`}
-                  >
-                    <video
-                      controls
-                      playsInline
-                      preload="metadata"
-                      poster={project.poster}
-                      key={project.videoUrl}
-                      className={`work-video-player ${
-                        project.ratio === "9:16" ? "video-9-16" : "video-16-9"
+                    <div
+                      className={`work-video-wrapper ${
+                        project.ratio === "9:16" ? "wrapper-9-16" : "wrapper-16-9"
                       }`}
                     >
-                      {project.videoUrl.endsWith(".mov") ? (
-                        <>
-                          <source
-                            src={project.videoUrl.replace(/\.mov$/i, ".mp4")}
-                            type="video/mp4"
-                          />
-                          <source src={project.videoUrl} type="video/quicktime" />
-                        </>
-                      ) : (
-                        <source src={project.videoUrl} type="video/mp4" />
-                      )}
-                      Your browser does not support the video tag.
-                    </video>
+                      <video
+                        controls
+                        playsInline
+                        preload="metadata"
+                        poster={project.poster}
+                        key={project.videoUrl}
+                        className={`work-video-player ${
+                          project.ratio === "9:16" ? "video-9-16" : "video-16-9"
+                        }`}
+                      >
+                        {project.videoUrl.endsWith(".mov") ? (
+                          <>
+                            <source
+                              src={project.videoUrl.replace(/\.mov$/i, ".mp4")}
+                              type="video/mp4"
+                            />
+                            <source src={project.videoUrl} type="video/quicktime" />
+                          </>
+                        ) : (
+                          <source src={project.videoUrl} type="video/mp4" />
+                        )}
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ========================================================
+            MOBILE VIEW (Single heading "My work", continuous vertical feed)
+            ======================================================== */}
+        <div className="work-mobile-view">
+          <div className="work-mobile-header">
+            <h2 className="work-mobile-title">
+              My <span>work</span>
+            </h2>
+          </div>
+
+          <div className="work-mobile-feed">
+            {mobileProjects.map((project, idx) => (
+              <div
+                key={`mobile-${project.id}`}
+                className={`work-mobile-card ${
+                  project.ratio === "9:16" ? "mobile-card-shorts" : "mobile-card-landscape"
+                }`}
+              >
+                <div className="work-mobile-card-header">
+                  <div className="work-mobile-card-title-row">
+                    <span className="work-mobile-num">
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <div className="work-mobile-title-group">
+                      <h3 className="work-mobile-project-title">{project.title}</h3>
+                      <span className="work-mobile-badge">
+                        {project.category === "reel"
+                          ? "Showcase Reel • 16:9"
+                          : project.ratio === "9:16"
+                          ? "Short-Form • 9:16"
+                          : "Long-Form • 16:9"}
+                      </span>
+                    </div>
                   </div>
-                </>
-              )}
-            </div>
-          ))}
+                  <p className="work-mobile-desc">{project.description}</p>
+                  {project.tools && (
+                    <div className="work-mobile-tools">
+                      <span>Tools:</span> {project.tools}
+                    </div>
+                  )}
+                </div>
+
+                <div
+                  className={`work-mobile-video-container ${
+                    project.ratio === "9:16"
+                      ? "container-shorts"
+                      : "container-landscape"
+                  }`}
+                >
+                  <video
+                    controls
+                    playsInline
+                    preload="metadata"
+                    poster={project.poster}
+                    className="work-mobile-video-element"
+                  >
+                    {project.videoUrl.endsWith(".mov") ? (
+                      <>
+                        <source
+                          src={project.videoUrl.replace(/\.mov$/i, ".mp4")}
+                          type="video/mp4"
+                        />
+                        <source src={project.videoUrl} type="video/quicktime" />
+                      </>
+                    ) : (
+                      <source src={project.videoUrl} type="video/mp4" />
+                    )}
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -469,3 +469,141 @@ h2.landing-info-h2 {
   font-size: 18px;
   font-weight: 800;
 }
+
+/* ========================================================
+   MOBILE PHONE ONLY (max-width: 768px)
+   - Smaller headline/hero text
+   - Fully visible 3D character (not cut off)
+   ======================================================== */
+@media only screen and (max-width: 768px) {
+  .landing-section {
+    height: 100svh;
+    height: 100vh;
+    min-height: 580px;
+    position: relative;
+    overflow: hidden;
+  }
+  .landing-container {
+    width: var(--cWidth);
+    height: 100%;
+    position: relative;
+  }
+
+  /* Intro headline text sizing */
+  .landing-intro {
+    top: 64px;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    text-align: left;
+    padding: 0 4px;
+    box-sizing: border-box;
+  }
+  .landing-intro h2 {
+    font-size: 13px !important;
+    letter-spacing: 1.5px;
+  }
+  .landing-intro h1 {
+    font-size: 24px !important;
+    line-height: 26px !important;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .landing-badge {
+    margin-top: 6px;
+    padding: 2px 10px;
+    font-size: 10px;
+    letter-spacing: 0.6px;
+  }
+  .landing-subtitle {
+    margin: 5px 0 0 0;
+    font-size: 12px;
+    line-height: 16px;
+    max-width: 260px;
+    color: #9f9fb0;
+  }
+
+  /* Creative title & client card at bottom */
+  .landing-info {
+    bottom: 16px;
+    right: 50%;
+    transform: translateX(50%);
+    width: calc(100% - 24px);
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+  }
+  .landing-info h3 {
+    font-size: 12px !important;
+    letter-spacing: 1.5px;
+  }
+  .landing-info h2 {
+    font-size: 18px !important;
+    line-height: 22px !important;
+    margin: -2px 0 0 0 !important;
+    justify-content: center;
+  }
+  h2.landing-info-h2 {
+    font-size: 22px !important;
+    line-height: 26px !important;
+    width: auto !important;
+    margin-left: 0 !important;
+    text-align: center;
+  }
+  .landing-clients-card {
+    margin-top: 8px;
+    padding: 6px 14px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: auto;
+    box-sizing: border-box;
+  }
+  .landing-clients-card h3 {
+    font-size: 9.5px;
+  }
+  .landing-clients-card .client-count {
+    font-size: 12.5px;
+  }
+  .client-avatars-stack {
+    margin-top: 0;
+  }
+  .avatar-circle {
+    width: 26px;
+    height: 26px;
+    margin-left: -6px;
+  }
+  .plus-overlay {
+    font-size: 12px;
+  }
+
+  /* 3D Character Model visibility & fit on phone screens */
+  .character-model {
+    height: 72vh !important;
+    max-height: none !important;
+    bottom: 48px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+  }
+  .character-model::after {
+    height: 60px !important;
+    bottom: 0px !important;
+    opacity: 0.45 !important;
+    pointer-events: none !important;
+  }
+  .character-model::before {
+    display: none !important;
+  }
+  .character-rim {
+    width: 250px !important;
+    height: 250px !important;
+  }
+}

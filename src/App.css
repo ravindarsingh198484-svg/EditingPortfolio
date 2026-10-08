@@ -26,3 +26,15 @@
     max-width: var(--cWidth);
   }
 }
+
+/* ========================================================
+   MOBILE ONLY (max-width: 768px):
+   Hide About me, What I do, and Career & Experience sections
+   ======================================================== */
+@media only screen and (max-width: 768px) {
+  .about-section,
+  .whatIDO,
+  .career-section {
+    display: none !important;
+  }
+}

@@ -118,7 +118,7 @@ export function setCharTimeline(
         .fromTo(".whatIDO", { y: 0 }, { y: "15%", duration: 2 }, 0)
         .to(character.rotation, { x: -0.04, duration: 2, delay: 1 }, 0);
     }
-  } else {
+  } else if (window.innerWidth > 768) {
     if (character) {
       const tM2 = gsap.timeline({
         scrollTrigger: {
@@ -133,6 +133,9 @@ export function setCharTimeline(
 }
 
 export function setAllTimeline() {
+  // On mobile phones (<= 768px), career section is hidden
+  if (window.innerWidth <= 768) return;
+
   const careerTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: ".career-section",

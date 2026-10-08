@@ -81,3 +81,19 @@
     font-size: 18px;
   }
 }
+
+/* ========================================================
+   MOBILE VIEW (max-width: 768px):
+   Hide ABOUT and CAREER links, display sleek WORK and CONTACT
+   ======================================================== */
+@media only screen and (max-width: 768px) {
+  .nav-item-about,
+  .nav-item-career {
+    display: none !important;
+  }
+  .header ul {
+    flex-direction: row !important;
+    column-gap: 22px !important;
+    align-items: center !important;
+  }
+}
